@@ -1405,7 +1405,7 @@ const CivicReportingSystem = () => {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-orange-600 mb-4">
                 Government Departments
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -2583,30 +2583,66 @@ const CivicReportingSystem = () => {
                         <p className="text-gray-700 mb-3">{issue.description}</p>
 
                         {/* Photo Comparison Section */}
+                        {/* Photo Comparison Section */}
+                        {/* Photo Comparison Section (stack on mobile, side-by-side on desktop) */}
                         {(issue.photo || issue.verificationPhoto) && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                            {issue.photo && (
-                              <div>
-                                <p className="text-sm font-medium text-gray-700 mb-2">Citizen's Photo (Before):</p>
-                                <img 
-                                  src={issue.photo} 
-                                  alt="Before" 
-                                  className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90"
-                                  onClick={() => window.open(issue.photo, '_blank')}
-                                />
+                          <div className="mb-4">
+                            <div className="relative">
+                              <div className="grid grid-cols-1 min-[520px]:grid-cols-2 gap-4">
+                                {/* Citizen (Before) */}
+                                {(() => {
+                                  const beforeSrc = issue.photo || issue.photo_url;
+                                  return beforeSrc ? (
+                                    <div>
+                                      <p className="text-sm font-medium text-gray-700 mb-2">Citizen's Photo (Before):</p>
+                                      <div
+                                        className="relative cursor-pointer rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 bg-gray-50"
+                                        onClick={() => window.open(beforeSrc, '_blank')}
+                                      >
+                                        <img
+                                          src={beforeSrc}
+                                          alt="Before"
+                                          className="block w-full h-44 md:h-56 max-h-64 object-cover"
+                                          onError={(e) => (e.currentTarget.style.display = 'none')}
+                                        />
+                                        <div className="absolute inset-0 pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                                      </div>
+                                    </div>
+                                  ) : null;
+                                })()}
+
+                                {/* Field Worker (After) */}
+                                {(() => {
+                                  const afterSrc = issue.verificationPhoto || issue.verification_photo_url;
+                                  return afterSrc ? (
+                                    <div>
+                                      <p className="text-sm font-medium text-gray-700 mb-2">Field Worker's Photo (After):</p>
+                                      <div
+                                        className="relative cursor-pointer rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 bg-gray-50"
+                                        onClick={() => window.open(afterSrc, '_blank')}
+                                      >
+                                        <img
+                                          src={afterSrc}
+                                          alt="After"
+                                          className="block w-full h-44 md:h-56 max-h-64 object-cover"
+                                          onError={(e) => (e.currentTarget.style.display = 'none')}
+                                        />
+                                        <div className="absolute inset-0 pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                                      </div>
+                                    </div>
+                                  ) : null;
+                                })()}
                               </div>
-                            )}
-                            {issue.verificationPhoto && (
-                              <div>
-                                <p className="text-sm font-medium text-gray-700 mb-2">Field Worker's Photo (After):</p>
-                                <img 
-                                  src={issue.verificationPhoto} 
-                                  alt="After" 
-                                  className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90"
-                                  onClick={() => window.open(issue.verificationPhoto, '_blank')}
-                                />
-                              </div>
-                            )}
+
+                              {/* VS chip centered (only when both exist, only on >= sm screens) */}
+                              {(issue.photo || issue.photo_url) && (issue.verificationPhoto || issue.verification_photo_url) && (
+                                <div className="hidden sm:flex absolute inset-0 items-center justify-center pointer-events-none">
+                                  <span className="px-3 py-1 rounded-full bg-gray-900/70 text-white text-xs font-semibold shadow-md">
+                                    VS
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
 
