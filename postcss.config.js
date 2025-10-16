@@ -6,10 +6,9 @@
 //   }
 // }
 
-
 export default {
   plugins: {
-    '@tailwindcss/postcss': {},
+    '@tailwindcss/postcss': {}, // Use this instead of 'tailwindcss'
     autoprefixer: {},
-  }
+  },
 }
